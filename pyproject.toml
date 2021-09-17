@@ -1,0 +1,47 @@
+[tool.poetry]
+name = "messengerapp"
+version = "0.1.0"
+description = ""
+authors = ["Kirill <kir.pystin@gmail.com>"]
+packages = [
+    { include = "messenger" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+aiohttp = "^3.7.4"
+alembic = "^1.7.1"
+asyncpgsa = "^0.27.1"
+ConfigArgParse = "^1.5.2"
+psycopg2-binary = "^2.9.1"
+aiohttp-apispec = "^2.2.1"
+aiohttp-swagger = "^1.0.15"
+python-dotenv = "^0.19.0"
+aiomisc = "^14.4.2"
+aiofile = "^3.7.1"
+asyncpg = "^0.24.0"
+
+[tool.poetry.dev-dependencies]
+factory-boy = "^3.2.0"
+pytest = "^6.2.5"
+SQLAlchemy-Utils = "^0.37.8"
+isort = "^5.9.3"
+black = "^21.9b0"
+pytest-asyncio = "^0.15.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+db = "messenger.db.__main__:main"
+run_server = "messenger.__main__:main"
+
+[tool.pytest.ini_options]
+testpaths = ['tests']
+python_files = 'test_*'
+python_functions = "test_*"
+python_classes = "Test*"
+log_cli_level = "DEBUG"
+addopts = "-p no:warnings"
+env = "D:IS_TESTING=1:"
