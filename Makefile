@@ -1,13 +1,11 @@
-PROJECT_NAME ?= messenger
-VERSION = $(shell python3 setup.py --version | tr '+' '-')
-PROJECT_NAMESPACE ?= alvassin
-REGISTRY_IMAGE ?= $(PROJECT_NAMESPACE)/$(PROJECT_NAME)
-
 all:
 	@echo "make build     - Сборка Докера"
 	@echo "make migrations	- Создание миграций"
 	@echo "make migrate	- Применение миграций(изменение состояния БД)"
 	@echo "make run	- Запуск приложения"
+	@echo "make install	- Установка всех зависимостей"
+	@echo "make test	- Запуск тестов"
+	@echo "make coverage	- Запуск метрик тестового покрытия"
 
 	@exit 0
 
@@ -26,3 +24,10 @@ build:
 install:
 	pip install poetry
 	poetry install
+
+coverage:
+	coverage run -m pytest
+	coverage report -m
+
+test:
+	pytest

@@ -1,18 +1,16 @@
 services:
   db:
     image: postgres:12.0-alpine
-    container_name: messenger_db
+    container_name: movie_app_db
     ports:
       - 0.0.0.0:35432:5432
-    environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=user
-      - POSTGRES_DB=messenger
+    env_file:
+      - .env
     networks:
-      - messenger-network
+      - movie-network
     volumes:
       - ./_data:/var/lib/postgresql/data
 
 networks:
-  messenger-network:
-    name: messenger-network
+  movie-network:
+    name: movie-network
