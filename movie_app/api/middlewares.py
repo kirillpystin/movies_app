@@ -2,7 +2,7 @@ import os
 
 from aiofile import async_open
 from aiohttp.web import HTTPException, json_response, middleware
-
+from http import HTTPStatus
 
 @middleware
 async def error_middleware(request, handler):
@@ -17,7 +17,7 @@ async def error_middleware(request, handler):
     """
     try:
         if hasattr(request.match_info._route, 'status') and request.match_info._route.status == 404:
-            return json_response({"error": "not found"})
+            return json_response({"error": "not found"}, status=HTTPStatus.NOT_FOUND)
 
         response = await handler(request)
 
