@@ -1,6 +1,6 @@
 """Модуль, хранящий JSON схемы"""
 from marshmallow import Schema
-from marshmallow.fields import Field, Int, Str
+from marshmallow.fields import Field, Int, List, Nested, Str
 
 
 class LoadActor(Schema):
@@ -12,3 +12,4 @@ class LoadActor(Schema):
 class ActorSchema(Schema):
     id = Int(dump_only=True)
     name = Str()
+    films = Nested("FilmSchema", exclude=("actors",), many=True, dump_only=True)

@@ -26,6 +26,10 @@ class Core(object):
     # Число записей на странице
     paginate_count = 100
 
+    async_session = sessionmaker(
+        engine, expire_on_commit=False, class_=AsyncSession
+    )
+
     @staticmethod
     def read_csv(films_csv):
         """Чтение фильмов из файла.
@@ -36,7 +40,7 @@ class Core(object):
         list_of_films = []
         with open(films_csv, "r") as file:
             my_reader = csv.reader(file, delimiter=",")
-            rows = list(my_reader)
+            rows = tuple(my_reader)
             titles = rows[0]
 
             for row in rows[1:]:
@@ -55,13 +59,8 @@ class Core(object):
         Args:
             records(list): Список записей на добавление
         """
-        async_session = sessionmaker(
-            cls.engine, expire_on_commit=False, class_=AsyncSession
-        )
-
-        async with async_session() as session:
-            async with session.begin():
-                session.add_all(records)
+        async with cls.async_session() as session:
+            session.add_all(records)
             await session.commit()
         await cls.engine.dispose()
 
@@ -73,13 +72,9 @@ class Core(object):
             record_id(str): id записи
         """
         record_id = int(record_id)
-        async_session = sessionmaker(
-            cls.engine, expire_on_commit=False, class_=AsyncSession
-        )
 
-        async with async_session() as session:
-            async with session.begin():
-                record = await session.get(cls.model, record_id)
+        async with cls.async_session() as session:
+            record = await session.get(cls.model, record_id)
 
         await cls.engine.dispose()
 
@@ -92,13 +87,8 @@ class Core(object):
         Args:
             params(dict): Параметры, для создания записи
         """
-        async_session = sessionmaker(
-            cls.engine, expire_on_commit=False, class_=AsyncSession
-        )
-
-        async with async_session() as session:
-            async with session.begin():
-                session.add(cls.model(**params))
+        async with cls.async_session() as session:
+            session.add(cls.model(**params))
             await session.commit()
         await cls.engine.dispose()
 
@@ -115,11 +105,7 @@ class Core(object):
         """
         page_number = int(page_number)
 
-        async_session = sessionmaker(
-            cls.engine, expire_on_commit=False, class_=AsyncSession
-        )
-
-        async with async_session() as session:
+        async with cls.async_session() as session:
             result = await session.execute(
                 select(cls.model)
                 .offset(cls.paginate_count * page_number)
@@ -132,6 +118,27 @@ class Core(object):
         return cls.schema.dump(result, many=True)
 
     @classmethod
+    async def get_by(cls, **kwargs):
+        """Извлечение записи с заданным филтром.
+
+        Args:
+            kwargs: параметры запроса
+
+        Returns:
+            list: Список извлеченных объъектов
+
+        """
+        async with cls.async_session() as session:
+            result = await session.execute(
+                select(cls.model)
+                .filter_by(**kwargs)
+                .limit(1)
+            )
+            result = [a1 for a1 in result.scalars()][0]
+
+        return result
+
+    @classmethod
     async def delete(cls, record_id):
         """Удаление записи.
 
@@ -139,14 +146,9 @@ class Core(object):
             record_id(int): идентификатор записи.
 
         """
-        async_session = sessionmaker(
-            cls.engine, expire_on_commit=False, class_=AsyncSession
-        )
-
-        async with async_session() as session:
-            async with session.begin():
-                record = await session.get(cls.model, int(record_id))
-                await session.delete(record)
+        async with cls.async_session() as session:
+            record = await session.get(cls.model, int(record_id))
+            await session.delete(record)
             await session.commit()
         await cls.engine.dispose()
 
@@ -159,16 +161,11 @@ class Core(object):
         """
         record_id = kwargs.pop("id")
 
-        async_session = sessionmaker(
-            cls.engine, expire_on_commit=False, class_=AsyncSession
-        )
-
-        async with async_session() as session:
-            async with session.begin():
-                await session.execute(
-                    update(cls.table)
-                    .where(cls.table.c.id == record_id)
-                    .values(**kwargs)
-                )
+        async with cls.async_session() as session:
+            await session.execute(
+                update(cls.table)
+                .where(cls.table.c.id == record_id)
+                .values(**kwargs)
+            )
             await session.commit()
         await cls.engine.dispose()

@@ -4,7 +4,7 @@ from movie_app.db.schema import films_table
 from movie_app.models import Film
 from movie_app.schemas.film import FilmSchema
 
-from .actors import Actor
+from .actors import ActorsActions
 from .base import Core
 
 
@@ -52,10 +52,12 @@ class FilmsActions(Core):
         Args:
             films_csv: Файл с фильмами.
         """
-        await cls.add_records(cls.get_films_data(cls.read_csv(films_csv)))
+        await cls.add_records(
+            await cls.get_films_and_actors_data(cls.read_csv(films_csv))
+        )
 
-    @staticmethod
-    def get_films_and_actors_data(films):
+    @classmethod
+    async def get_films_and_actors_data(cls, films):
         """Извлечение информации о фильмах и актерах.
 
         Args:
@@ -76,7 +78,8 @@ class FilmsActions(Core):
             )
 
             for actor in ast.literal_eval(f["actors_list"]):
-                film.actors.append(Actor(name=actor))
+                rec = await ActorsActions.get_by(name=actor)
+                film.actors.append(rec)
 
             films_list.append(film)
 

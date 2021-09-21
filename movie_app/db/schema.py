@@ -1,6 +1,4 @@
-from sqlalchemy import Column
-from sqlalchemy import (ForeignKey, Integer, MetaData,
-                        String, Table)
+from sqlalchemy import Column, ForeignKey, Integer, MetaData, String, Table
 from sqlalchemy.orm import registry
 
 mapper_registry = registry()

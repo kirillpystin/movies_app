@@ -1,6 +1,4 @@
-from sqlalchemy.orm import mapper
-
-from movie_app.db.schema import films_table
+"""Модель фильма."""
 
 
 class Film(object):
@@ -8,6 +6,3 @@ class Film(object):
         self.title = title
         self.rating = rating
         self.genre = genre
-
-
-mapper(Film, films_table)
