@@ -5,7 +5,7 @@ import os
 
 from alembic.config import CommandLine
 
-from ..utils.pg import DEFAULT_PG_URL, make_alembic_config
+from ..utils.pg import make_alembic_config
 
 
 def main():
@@ -15,7 +15,7 @@ def main():
     alembic.parser.formatter_class = argparse.ArgumentDefaultsHelpFormatter
     alembic.parser.add_argument(
         "--pg-url",
-        default=os.getenv("POSTGRES_DB_URL", DEFAULT_PG_URL),
+        default=os.getenv("POSTGRES_DB_URL"),
         help="Database URL [env var: POSTGRES_DB_URL]",
     )
 

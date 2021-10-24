@@ -19,7 +19,7 @@ from alembic.command import downgrade, upgrade
 from alembic.config import Config
 from alembic.script import Script, ScriptDirectory
 
-from movie_app.utils.pg import make_alembic_config
+from app.utils.pg import make_alembic_config
 
 
 def get_revisions():

@@ -6,8 +6,6 @@ from typing import Union
 from alembic.config import Config
 from configargparse import Namespace
 
-DEFAULT_PG_URL = "postgresql://user:user@0.0.0.0:35432/movies"
-
 PROJECT_PATH = Path(__file__).parent.parent.resolve()
 
 

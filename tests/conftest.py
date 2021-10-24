@@ -4,14 +4,11 @@ from types import SimpleNamespace
 
 import pytest
 from alembic.command import upgrade
-from sqlalchemy import create_engine
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy_utils import create_database, database_exists, drop_database
 
-from movie_app.__main__ import parser
-from movie_app.api.app import create_app
-from movie_app.constants import Templates
-from movie_app.utils.pg import make_alembic_config
+from app.__main__ import parser
+from app.api.app import create_app
+from app.utils.pg import make_alembic_config
 
 
 def delete_db(tmp_url):
@@ -75,26 +72,6 @@ async def api_client(aiohttp_client, arguments):
         yield client
     finally:
         await client.close()
-
-
-@pytest.fixture(scope="session")
-async def migrated_postgres_connection(migrated_postgres):
-    """Синхронное соединение со смигрированной БД."""
-    engine = create_engine(migrated_postgres)
-    async with engine.connect() as conn:
-        yield conn
-
-
-@pytest.fixture(scope="session")
-async def async_conn(migrated_postgres):
-    """Асинхронное соединение со смигрированной БД."""
-    engine = create_async_engine(Templates.ASYNC_CONNECTION_URL)
-
-    async with AsyncSession(engine) as session:
-        async with session.begin():
-            yield session
-
-        await session.commit()
 
 
 @pytest.fixture(scope="session")

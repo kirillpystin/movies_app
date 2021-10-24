@@ -1,8 +1,8 @@
 import ast
 
-from movie_app.db.schema import actor_table
-from movie_app.models import Actor
-from movie_app.schemas.actor import ActorSchema
+from app.db.schema import actor_table
+from app.models import Actor
+from app.schemas.actor import ActorSchema
 
 from .base import Core
 
@@ -19,7 +19,7 @@ class ActorsActions(Core):
         """Загрузка фильмов из csv в БД.
 
         Args:
-            films_csv: Файл с фильмами.
+            films_csv:pool_size=20 Файл с фильмами.
         """
         await cls.add_records(cls.get_actors_data(cls.read_csv(films_csv)))
 

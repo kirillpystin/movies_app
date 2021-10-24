@@ -1,9 +1,13 @@
+import os
 from logging.config import fileConfig
 
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
-from movie_app.db.schema import metadata
+from app.db.schema import metadata
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -12,6 +16,8 @@ config = context.config
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 fileConfig(config.config_file_name)
+
+config.set_main_option('sqlalchemy.url', os.environ['POSTGRES_DB_URL'])
 
 # add your model's MetaData object here
 # for 'autogenerate' support

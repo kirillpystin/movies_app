@@ -6,9 +6,9 @@ from aiohttp.web import Response
 from aiohttp.web_request import Request
 from aiohttp_apispec import docs, form_schema, request_schema, response_schema
 
-from movie_app.api.handlers.films import FilmsActions
-from movie_app.schemas.actor import LoadActor
-from movie_app.schemas.film import FilmSchema
+from app.api.handlers.films import FilmsActions
+from app.schemas.actor import LoadActor
+from app.schemas.film import FilmSchema
 
 film_router = web.RouteTableDef()
 
@@ -33,7 +33,7 @@ async def load_films(file_scv):
 @docs(summary="Загрузить фильмы и актеров")
 @form_schema(LoadActor())
 async def load_films_with_actors(file_scv):
-    """Загрзка фильмов и актеров.
+    """Загрузка фильмов и актеров.
 
     Args:
         file_scv(Request): Файл с фильмами

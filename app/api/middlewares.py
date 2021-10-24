@@ -29,6 +29,8 @@ async def error_middleware(request, handler):
             return json_response(response)
         else:
             return response
+    except Exception as e:
+        return json_response({"error": e})
     except HTTPException as ex:
         if ex.status != 404:
             raise

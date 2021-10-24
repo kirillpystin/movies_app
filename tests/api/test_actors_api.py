@@ -3,10 +3,7 @@ import logging
 from http import HTTPStatus
 
 import aiohttp
-import pytest
 
-from movie_app.api.handlers import *
-from movie_app.models import *
 from tests.conftest import *
 
 log = logging.getLogger(__name__)

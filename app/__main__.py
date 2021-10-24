@@ -1,3 +1,5 @@
+import os
+
 import argparse
 import pwd
 
@@ -8,9 +10,8 @@ from configargparse import ArgumentParser
 from dotenv import load_dotenv
 from yarl import URL
 
-from movie_app.api.app import create_app
-from movie_app.utils.argparse import positive_int
-from movie_app.utils.pg import DEFAULT_PG_URL
+from app.api.app import create_app
+from app.utils.argparse import positive_int
 
 load_dotenv()
 
@@ -43,7 +44,7 @@ group = parser.add_argument_group("PostgreSQL options")
 group.add_argument(
     "--pg-url",
     type=URL,
-    default=URL(DEFAULT_PG_URL),
+    default=URL(os.environ['POSTGRES_DB_URL']),
     help="URL to use to connect to the database",
 )
 group.add_argument(

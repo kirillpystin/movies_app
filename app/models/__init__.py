@@ -1,6 +1,6 @@
 from sqlalchemy.orm import registry, relationship
 
-from movie_app.db.schema import *
+from app.db.schema import *
 
 from .actor import Actor
 from .film import Film

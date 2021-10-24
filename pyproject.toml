@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Kirill <kir.pystin@gmail.com>"]
 packages = [
-    { include = "movie_app" },
+    { include = "app" },
 ]
 
 [tool.poetry.dependencies]
@@ -38,8 +38,8 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-db = "movie_app.db.__main__:main"
-run_server = "movie_app.__main__:main"
+db = "app.db.__main__:main"
+run_server = "app.__main__:main"
 
 [tool.pytest.ini_options]
 testpaths = ['tests']
@@ -50,4 +50,4 @@ log_cli_level = "DEBUG"
 addopts ="-p no:warnings"
 
 [tool.coverage.run]
-source = ['movie_app']
+source = ['app']

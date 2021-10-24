@@ -5,8 +5,8 @@ from aiohttp import web
 from aiohttp.web import Response
 from aiohttp_apispec import docs, form_schema, request_schema, response_schema
 
-from movie_app.api.handlers.actors import ActorsActions
-from movie_app.schemas.actor import ActorSchema, LoadActor
+from app.api.handlers.actors import ActorsActions
+from app.schemas.actor import ActorSchema, LoadActor
 
 actor_router = web.RouteTableDef()
 
@@ -15,7 +15,7 @@ actor_router = web.RouteTableDef()
 @docs(summary="Загрузить актеров")
 @form_schema(LoadActor())
 async def load_actors(file_scv):
-    """Извекечение записи об актере.
+    """Извлечение записи об актере.
 
     Args:
         file_scv(str): Файл с актерами.
@@ -29,7 +29,7 @@ async def load_actors(file_scv):
 @actor_router.get("/actors/{record_id}")
 @docs(summary="Извлечь актера")
 async def get_actor(record_id):
-    """Извекечение записи об актере.
+    """Извлечение записи об актере.
     Args:
         record_id(str): id записи.
     Returns:

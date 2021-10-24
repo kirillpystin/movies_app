@@ -1,8 +1,8 @@
 import ast
 
-from movie_app.db.schema import films_table
-from movie_app.models import Film
-from movie_app.schemas.film import FilmSchema
+from app.db.schema import films_table
+from app.models import Film
+from app.schemas.film import FilmSchema
 
 from .actors import ActorsActions
 from .base import Core
@@ -67,6 +67,8 @@ class FilmsActions(Core):
             list: Список фильмов.
         """
 
+        actors_dict = {i.name: i for i in await ActorsActions.get_all()}
+
         films_list = []
         for f in films:
             film = Film(
@@ -78,8 +80,7 @@ class FilmsActions(Core):
             )
 
             for actor in ast.literal_eval(f["actors_list"]):
-                rec = await ActorsActions.get_by(name=actor)
-                film.actors.append(rec)
+                film.actors.append(actors_dict.get(actor))
 
             films_list.append(film)
 
